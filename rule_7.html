@@ -1,0 +1,41 @@
+<html>
+<head>
+     <meta http-equiv="content-type" charset="utf-8">
+     <link rel="stylesheet" href="css/main.css">
+<title>7並べルール</title>
+</head>
+<body>
+
+
+    <h2><center>7並べルール</center></h2>
+
+    <br>
+
+<p><center>・親は各プレイヤーにカードを一枚ずつ順に、<br>カードがなくなるまで配る。</center></p>
+<p><center>・カードが配り終わったら、まず前準備として、<br>  ランクが7のカードを
+持っているプレイヤーは、<br>手札からそのカードを取り出し、場に置く。</center></p
+>
+<p><center>・7の札が並べ終わったらゲームを開始する。</center></p>
+
+    <center>
+    <button id="openAndResize" style="WIDTH:400px;HEIGHT:50px;" size="5">ゲーム開始(新しいウィンドウが開く)</button>
+　　<button onclick="location.href='top.html'" style="WIDTH:400px;HEIGHT:50px;" size="5">戻る</button></center>
+    <br>
+
+</div>
+
+
+
+<br>
+<script>
+	var myWindow;
+	document.getElementById( "openAndResize" ).onclick = function () {
+	myWindow = open( "play_7.html", null, "width=200,height=200" ) ;
+	myWindow.resizeTo( 910, 900 ) ;
+	}
+</script>
+	
+
+
+</body>
+</html>

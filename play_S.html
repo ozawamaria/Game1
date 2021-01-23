@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content = "text/html; charset = utf-8"/>
+        <link rel = "stylesheet" href = "shinkei.css">
+        <title>神経衰弱</title>
+    </head>
+    <body>
+        <h1>神経衰弱</h1>
+        <div id = "panel"></div>
+        <h3>自分の点数：<span id = "countUnit"></span></h3>
+        <h3>相手の点数：<span id = "countUnit2"></span></h3>
+        <script type="text/javascript">
+            // div要素を格納
+var cards = [];
+// 開始時間
+var startTime;
+// 経過秒数用 タイマーID
+var timer;
+// カードめくり用 タイマーID
+var backTimer;
+// 1枚目かどうかのフラグ   1枚目: true   2枚目: false
+var flgFirst = true;
+// 1枚目のカードを格納
+var cardFirst;
+// 自分のそろえた枚数
+var countUnit = 0;
+// 敵のそろえた枚数
+var countUnit2 = 0;
+//Player2
+var GUEST = 0;
+//プレイヤー人数
+var MAN = 2;
+//現在プレー中
+var player;
+//順番表示用
+var cycle;
+
+var name = new Array(2);
+	name[0] = 'Player1';
+	name[1] = 'Player2';
+	
+function test(){
+  //1秒後に関数「syori()」を呼び出す
+  setTimeout("syori2()", 1000);
+}
+function syori2(){
+   var div = document.createElement('div');
+        div.className = 'card'+ramdom2;
+        div.index = ramdom2;
+        div.number = arr[ramdom2];
+        div.innerHTML = '';
+        panel.appendChild(div);
+        cards.push(div);
+}	
+function syori1(){
+   var div = document.createElement('div');
+        div.className = 'card'+ramdom1;
+        div.index = ramdom1;
+        div.number = arr[ramdom1];
+        div.innerHTML = '';
+        panel.appendChild(div);
+        cards.push(div);
+}	
+/////プレーヤーチェンジ
+function player_change()
+{
+	player = (player + 1) % MAN;
+}
+
+function player2_play()
+{
+    //1枚目が存在しているところまで
+     do{
+          var ramdom1 = Math.floor(Math.random() * n--);
+         }while(nasi[ramdom1]==1)
+
+    //2枚目が存在しているところまで
+     do{
+          var ramdom2 = Math.floor(Math.random() * n--);
+         }while(nasi[ramdom2]==1)
+          // 1枚目の処理
+          shori1();
+    if (flgFirst){
+        // cardFirst は2枚目の処理のときに使う
+        cardFirst = div;
+        // フラグ変更
+        flgFirst = false;
+        
+        test();
+    // 2枚目の処理
+    }else{
+        
+        // 数字が1枚目と一致する場合
+        if (cardFirst.number == div.number){
+            countUnit1++;
+            // 見えない状態にする
+            backTimer = setTimeout(function(){
+                div.className = 'card' +ramdom2+ 'finish';
+                 nasi[div.index]=1;
+                cardFirst.className = 'card' +ramdom1+ 'finish';
+                backTimer = NaN;
+                return;
+                if (countUnit == 10){
+                    clearInterval(timer);  // timer終了
+                }
+            }, 500)
+
+        // 一致しない場合
+        }else{  
+            // カードを裏側に戻す
+            backTimer = setTimeout(function(){
+                div.className =  'card' +ramdom2+ 'back';
+                div.innerHTML = '';
+                cardFirst.className =  'card' +ramdom1+ 'back';
+                cardFirst.innerHTML = '';
+                cardFirst = null;
+                backTimer = NaN;
+                
+            }, 500);
+            player_change();
+        }
+         
+window.onload = function(){
+    // 数字格納 一時配列
+    var arr = [];
+    
+    for (var i = 0; i < 26; i++){
+        // ペアの数字を26組
+        arr.push(i);
+        arr.push(i);
+    }
+    
+    // シャッフル
+    shuffle(arr);
+    
+    var panel = document.getElementById('panel');
+    
+    // div要素作成
+    for (i = 0; i < 52; i++){
+        var div = document.createElement('div');
+        div.className = ''card' +i 'back'';
+        div.index = i;
+        div.number = arr[i];
+        div.innerHTML = '';
+        div.onclick = turn;
+        panel.appendChild(div);
+        cards.push(div);
+    }
+    // 開始時刻を取得
+    startTime = new Date();
+    // タイマー開始
+    startTimer();
+    
+}
+
+// シャッフル用関数
+function shuffle(arr) {
+    var n = arr.length;
+    var temp, i;
+
+    while (n) {
+        i = Math.floor(Math.random() * n--);
+        temp = arr[n];
+        arr[n] = arr[i];
+        arr[i] = temp;
+    }
+    return arr;
+}
+//カードがあるかないか
+//0がある、１がない
+var nasi[];
+ for (i = 0; i < 52; i++){
+     nasi[i]=0;
+ }
+// クリック時の処理
+function turn(e){
+    
+    var div = e.target;
+    
+    // カードのタイマー処理が動作中は return
+    if (backTimer) return;
+
+    // 裏向きのカードをクリックした場合は数字を表示する
+    if (div.innerHTML == ''){
+        div.className = 'card' + div.index;
+        div.innerHTML = div.number; 
+    }else{
+        // 数字が表示されているカードは return
+        return;
+    }
+    
+    // 1枚目の処理
+    if (flgFirst){
+        // cardFirst は2枚目の処理のときに使う
+        cardFirst = div;
+        // フラグ変更
+        flgFirst = false;
+        
+    // 2枚目の処理
+    }else{
+        
+        // 数字が1枚目と一致する場合
+        if (cardFirst.number == div.number){
+            countUnit++;
+            // 見えない状態にする
+            backTimer = setTimeout(function(){
+                div.className = 'card' +div.index+ 'finish';
+                 nasi[div.index]=1;
+                cardFirst.className = 'card' + div.index + 'finish';
+                backTimer = NaN;
+                
+                if (countUnit == 10){
+                    clearInterval(timer);  // timer終了
+                }
+            }, 500)
+
+        // 一致しない場合
+        }else{  
+            // カードを裏側に戻す
+            backTimer = setTimeout(function(){
+                div.className = 'card' + div.index + 'back';
+                div.innerHTML = '';
+                cardFirst.className = 'card' + div.index + 'back';
+                cardFirst.innerHTML = '';
+                cardFirst = null;
+                backTimer = NaN;
+                
+            }, 500);
+        }
+        
+        flgFirst = true;
+         //Player1→Player2
+                player_change();
+                player2_play();
+    }  
+}
+
+// タイマー開始
+function startTimer(){
+    timer = setInterval(showSecond, 1000);
+}
+
+// 秒数表示
+function showSecond(){
+
+    var nowTime = new Date();
+    var elapsedTime = Math.floor((nowTime - startTime) / 1000);
+    
+/*    var str = '経過秒数: ' + elapsedTime + '秒';
+    var re = document.getElementById('result');
+*/ 
+
+    re.innerHTML = str;
+}
+        </script>
+    </body>
+</html>
